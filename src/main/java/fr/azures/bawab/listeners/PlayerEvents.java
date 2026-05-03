@@ -15,6 +15,10 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        ServerPlayer serverPlayer = (ServerPlayer) event.getEntity();
+        if (!serverPlayer.connection.hasChannel(SendServerId.TYPE)) {
+            return;
+        }
         String playerName = event.getEntity().getName().getString();
         if (!Yggdrasil.serverIds.containsKey(playerName)) {
             try {
@@ -26,7 +30,6 @@ public class PlayerEvents {
                 e.printStackTrace();
             }
         } else {
-            ServerPlayer serverPlayer = (ServerPlayer) event.getEntity();
             serverPlayer.connection.disconnect(Component.literal(BawabConfig.KICK_MESSAGE.get()));
         }
     }
